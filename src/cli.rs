@@ -5,7 +5,7 @@ pub fn build_cli() -> App<'static, 'static> {
     App::new("Meeting Countdown")
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
-        .about("Utility to send the remaining time of something (e.g. a meeting) via MQTT or HTTP to a small display.")
+        .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(Arg::with_name("verbose")
             .short("v")
             .long("verbose")
