@@ -1,5 +1,4 @@
-use chrono::Local;
-use timeloop::TIMEFORMAT;
+use chrono::{Duration, Local};
 
 mod cli;
 mod timeloop;
@@ -15,7 +14,7 @@ fn main() {
         .and_then(cli::time_string_to_date_time)
         .expect("starttime could not be read from the command line");
 
-    let end = matches
+    let mut end = matches
         .value_of("endtime")
         .and_then(cli::time_string_to_date_time)
         .expect("endtime could not be read from the command line");
@@ -25,18 +24,16 @@ fn main() {
         .expect("end text could not be read from command line");
 
     let now = Local::now();
-    println!("# Now:   {}", now.format(TIMEFORMAT));
-    println!("# Start: {}", start.format(TIMEFORMAT));
-    println!("# End:   {}", end.format(TIMEFORMAT));
 
-    assert!(
-        end.timestamp() - start.timestamp() > 0,
-        "endtime has to be after starttime"
-    );
-    assert!(
-        end.timestamp() - now.timestamp() > 0,
-        "endtime has to be in the future"
-    );
+    if end.timestamp() - start.timestamp() <= 0 || end.timestamp() - now.timestamp() <= 0 {
+        end = end
+            .checked_add_signed(Duration::days(1))
+            .expect("failed to assume end date tomorrow");
+    }
+
+    println!("# Now:   {}", now.to_string());
+    println!("# Start: {}", start.to_string());
+    println!("# End:   {}", end.to_string());
 
     timeloop::timeloop(start, end, end_text, verbose, publish);
 }
