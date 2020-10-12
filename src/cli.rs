@@ -29,8 +29,7 @@ pub fn build_cli() -> App<'static, 'static> {
                 .long("start-text")
                 .value_name("STRING")
                 .takes_value(true)
-                .help("Text which is displayed before countdown starts.")
-                .default_value("Waiting for the next meeting to begin..."),
+                .help("Text which is displayed before countdown starts."),
         )
         .arg(
             Arg::with_name("end text")

@@ -11,16 +11,18 @@ pub const TIMEFORMAT: &str = "%_H:%M:%S";
 pub fn timeloop<F>(
     start: DateTime<chrono::Local>,
     end: DateTime<chrono::Local>,
-    start_text: &str,
+    start_text: Option<&str>,
     end_text: &str,
     verbose: bool,
     publish: F,
 ) where
     F: Fn(Topic, &str),
 {
-    publish(Topic::Hue, "240");
-    publish(Topic::Sat, "100");
-    publish(Topic::Text, &start_text);
+    if let Some(text) = start_text {
+        publish(Topic::Hue, "240");
+        publish(Topic::Sat, "100");
+        publish(Topic::Text, text);
+    }
 
     sleep_until_start(start);
 

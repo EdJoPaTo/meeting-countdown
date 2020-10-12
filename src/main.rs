@@ -19,9 +19,7 @@ fn main() {
         .and_then(cli::time_string_to_date_time)
         .expect("endtime could not be read from the command line");
 
-    let start_text = matches
-        .value_of("start text")
-        .expect("start text could not be read from command line");
+    let start_text = matches.value_of("start text");
 
     let end_text = matches
         .value_of("end text")
