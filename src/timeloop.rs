@@ -18,7 +18,6 @@ pub fn timeloop<F>(
 ) where
     F: Fn(Topic, &str),
 {
-
     publish(Topic::Hue, "240");
     publish(Topic::Sat, "100");
     publish(Topic::Text, &start_text);
