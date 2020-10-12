@@ -1,3 +1,6 @@
+use chrono::{DateTime, TimeZone};
+use std::time::Duration;
+
 pub fn calc_relative_position(start: i64, end: i64, position: i64) -> f64 {
     let relative_max = end - start;
     let relative_position = position - start;
@@ -8,6 +11,25 @@ pub fn interpolate(start: i64, end: i64, position: f64) -> i64 {
     let relative_max = end - start;
     let relative_position = relative_max as f64 * position;
     start + relative_position as i64
+}
+
+pub fn duration_until<TzFrom, TzUntil>(
+    from: DateTime<TzFrom>,
+    until: DateTime<TzUntil>,
+) -> Option<Duration>
+where
+    TzFrom: TimeZone,
+    TzUntil: TimeZone,
+{
+    let from = from.timestamp_nanos();
+    let until = until.timestamp_nanos();
+
+    let duration_in_nanos = until - from;
+    if duration_in_nanos > 0 {
+        Some(Duration::from_nanos(duration_in_nanos as u64))
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]
