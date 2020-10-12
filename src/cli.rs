@@ -17,7 +17,7 @@ pub fn build_cli() -> App<'static, 'static> {
             Arg::with_name("starttime")
                 .required(true)
                 .value_name("STARTTIME")
-                .help("Start time of the Meeting. From then the remaining time is published"),
+                .help("Start time of the Meeting. From then the remaining time is published."),
         )
         .arg(
             Arg::with_name("endtime")
