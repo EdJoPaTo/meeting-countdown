@@ -18,13 +18,17 @@ pub fn timeloop<F>(
 ) where
     F: Fn(Topic, &str),
 {
-    if let Some(text) = start_text {
-        publish(Topic::Hue, "240");
-        publish(Topic::Sat, "100");
-        publish(Topic::Text, text);
-    }
+    if let Some(duration) = get_duration_until_start(start, Local::now()) {
+        println!("wait till start");
 
-    sleep_until_start(start);
+        if let Some(text) = start_text {
+            publish(Topic::Hue, "240");
+            publish(Topic::Sat, "100");
+            publish(Topic::Text, text);
+        }
+
+        sleep(duration);
+    }
 
     loop {
         let now = Local::now();
@@ -79,14 +83,15 @@ pub fn timeloop<F>(
     publish(Topic::Sat, "100");
 }
 
-fn sleep_until_start(start: DateTime<Local>) {
-    let now = Local::now().timestamp_nanos();
+fn get_duration_until_start(start: DateTime<Local>, now: DateTime<Local>) -> Option<Duration> {
+    let now = now.timestamp_nanos();
     let start = start.timestamp_nanos();
 
     let nanos_till_start = start - now;
     if nanos_till_start > 0 {
-        println!("wait till start");
-        sleep(Duration::from_nanos(nanos_till_start as u64));
+        Some(Duration::from_nanos(nanos_till_start as u64))
+    } else {
+        None
     }
 }
 
