@@ -1,11 +1,12 @@
 use chrono::{DateTime, Local, NaiveTime};
-use clap::{App, Arg};
+use clap::{App, AppSettings, Arg};
 
 pub fn build_cli() -> App<'static, 'static> {
     App::new("Meeting Countdown")
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(env!("CARGO_PKG_DESCRIPTION"))
+        .setting(AppSettings::ColoredHelp)
         .arg(
             Arg::with_name("verbose")
                 .short("v")
