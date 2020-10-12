@@ -18,9 +18,9 @@ meeting-countdown --verbose 10:00 11:30 | led-matrix-remote http
 ```
 
 ```plaintext
-Meeting Countdown 0.1.0
+Meeting Countdown 0.3.0
 EdJoPaTo <meeting-countdown-rust@edjopato.de>
-Utility to send the remaining time of something (e.g. a meeting) via MQTT or HTTP to a small display.
+Prints out the rest time of a meeting compatible for led-matrix-remote
 
 USAGE:
     meeting-countdown [FLAGS] [OPTIONS] <STARTTIME> <ENDTIME>
@@ -31,9 +31,10 @@ FLAGS:
     -v, --verbose    Show each time tick on stdout
 
 OPTIONS:
-        --end-text <STRING>    Text which is displayed when the countdown ends. [default: THE END \o/]
+        --end-text <STRING>      Text which is displayed when the countdown ends. [default: Meeting is over. Have a nice day!]
+        --start-text <STRING>    Text which is displayed before countdown starts.
 
 ARGS:
-    <STARTTIME>    Start time of the Meeting. From then the remaining time is published
+    <STARTTIME>    Start time of the Meeting. From then the remaining time is published.
     <ENDTIME>      End time of the Meeting. Until then the remaining time is published.
 ```
