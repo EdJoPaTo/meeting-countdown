@@ -25,12 +25,20 @@ pub fn build_cli() -> App<'static, 'static> {
                 .help("End time of the Meeting. Until then the remaining time is published."),
         )
         .arg(
+            Arg::with_name("start text")
+                .long("start-text")
+                .value_name("STRING")
+                .takes_value(true)
+                .help("Text which is displayed before countdown starts.")
+                .default_value("Waiting for the next meeting to begin..."),
+        )
+        .arg(
             Arg::with_name("end text")
                 .long("end-text")
                 .value_name("STRING")
                 .takes_value(true)
                 .help("Text which is displayed when the countdown ends.")
-                .default_value("THE END \\o/"),
+                .default_value("Meeting is over. Have a nice day!"),
         )
 }
 

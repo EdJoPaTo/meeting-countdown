@@ -19,6 +19,10 @@ fn main() {
         .and_then(cli::time_string_to_date_time)
         .expect("endtime could not be read from the command line");
 
+    let start_text = matches
+        .value_of("start text")
+        .expect("start text could not be read from command line");
+
     let end_text = matches
         .value_of("end text")
         .expect("end text could not be read from command line");
@@ -35,7 +39,7 @@ fn main() {
     println!("# Start: {}", start.to_string());
     println!("# End:   {}", end.to_string());
 
-    timeloop::timeloop(start, end, end_text, verbose, publish);
+    timeloop::timeloop(start, end, start_text, end_text, verbose, publish);
 }
 
 fn publish(topic: topic::Topic, value: &str) {
