@@ -63,4 +63,20 @@ mod tests {
     fn interpolate_half() {
         assert_eq!(3, interpolate(2, 4, 0.5));
     }
+
+    #[test]
+    fn duration_until_past_is_none() {
+        let from = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
+        let until = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
+
+        assert_eq!(None, duration_until(from, until))
+    }
+
+    #[test]
+    fn duration_until_future_works() {
+        let from = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
+        let until = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
+
+        assert_eq!(Some(Duration::from_secs(120)), duration_until(from, until))
+    }
 }
