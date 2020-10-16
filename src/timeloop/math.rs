@@ -32,51 +32,46 @@ where
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[test]
+fn calc_relative_position_start() {
+    assert_eq!(0.0, calc_relative_position(2, 4, 2));
+}
+#[test]
+fn calc_relative_position_end() {
+    assert_eq!(1.0, calc_relative_position(2, 4, 4));
+}
+#[test]
+fn calc_relative_position_half() {
+    assert_eq!(0.5, calc_relative_position(2, 4, 3));
+}
 
-    #[test]
-    fn calc_relative_position_start() {
-        assert_eq!(0.0, calc_relative_position(2, 4, 2));
-    }
-    #[test]
-    fn calc_relative_position_end() {
-        assert_eq!(1.0, calc_relative_position(2, 4, 4));
-    }
-    #[test]
-    fn calc_relative_position_half() {
-        assert_eq!(0.5, calc_relative_position(2, 4, 3));
-    }
+#[test]
+fn interpolate_start() {
+    assert_eq!(2, interpolate(2, 4, 0.0));
+}
 
-    #[test]
-    fn interpolate_start() {
-        assert_eq!(2, interpolate(2, 4, 0.0));
-    }
+#[test]
+fn interpolate_end() {
+    assert_eq!(4, interpolate(2, 4, 1.0));
+}
 
-    #[test]
-    fn interpolate_end() {
-        assert_eq!(4, interpolate(2, 4, 1.0));
-    }
+#[test]
+fn interpolate_half() {
+    assert_eq!(3, interpolate(2, 4, 0.5));
+}
 
-    #[test]
-    fn interpolate_half() {
-        assert_eq!(3, interpolate(2, 4, 0.5));
-    }
+#[test]
+fn duration_until_past_is_none() {
+    let from = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
+    let until = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
 
-    #[test]
-    fn duration_until_past_is_none() {
-        let from = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
-        let until = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
+    assert_eq!(None, duration_until(from, until))
+}
 
-        assert_eq!(None, duration_until(from, until))
-    }
+#[test]
+fn duration_until_future_works() {
+    let from = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
+    let until = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
 
-    #[test]
-    fn duration_until_future_works() {
-        let from = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
-        let until = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
-
-        assert_eq!(Some(Duration::from_secs(120)), duration_until(from, until))
-    }
+    assert_eq!(Some(Duration::from_secs(120)), duration_until(from, until))
 }
