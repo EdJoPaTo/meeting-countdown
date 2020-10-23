@@ -89,7 +89,7 @@ fn sleep_until_second(modulo: u32) {
     let remaining_seconds = modulo - (current_second % modulo) - 1;
 
     sleep(Duration::new(
-        remaining_seconds as u64,
+        u64::from(remaining_seconds),
         remaining_nanoseconds,
     ));
 }

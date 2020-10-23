@@ -1,12 +1,14 @@
 use chrono::{DateTime, TimeZone};
 use std::time::Duration;
 
+#[allow(clippy::cast_precision_loss)]
 pub fn calc_relative_position(start: i64, end: i64, position: i64) -> f64 {
     let relative_max = end - start;
     let relative_position = position - start;
     relative_position as f64 / relative_max as f64
 }
 
+#[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
 pub fn interpolate(start: i64, end: i64, position: f64) -> i64 {
     let relative_max = end - start;
     let relative_position = relative_max as f64 * position;
@@ -26,6 +28,7 @@ where
 
     let duration_in_nanos = until - from;
     if duration_in_nanos > 0 {
+        #[allow(clippy::cast_sign_loss)]
         Some(Duration::from_nanos(duration_in_nanos as u64))
     } else {
         None
@@ -34,15 +37,15 @@ where
 
 #[test]
 fn calc_relative_position_start() {
-    assert_eq!(0.0, calc_relative_position(2, 4, 2));
+    assert!((0.0 - calc_relative_position(2, 4, 2)).abs() < f64::EPSILON);
 }
 #[test]
 fn calc_relative_position_end() {
-    assert_eq!(1.0, calc_relative_position(2, 4, 4));
+    assert!((1.0 - calc_relative_position(2, 4, 4)).abs() < f64::EPSILON);
 }
 #[test]
 fn calc_relative_position_half() {
-    assert_eq!(0.5, calc_relative_position(2, 4, 3));
+    assert!((0.5 - calc_relative_position(2, 4, 3)).abs() < f64::EPSILON);
 }
 
 #[test]
