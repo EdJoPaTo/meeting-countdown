@@ -1,6 +1,7 @@
 use chrono::{Duration, Local};
 
 mod cli;
+mod publish;
 mod timeloop;
 mod topic;
 
@@ -37,10 +38,5 @@ fn main() {
     println!("# Start: {}", start.to_string());
     println!("# End:   {}", end.to_string());
 
-    timeloop::timeloop(start, end, start_text, end_text, verbose, publish);
-}
-
-fn publish(topic: topic::Topic, value: &str) {
-    let verb = topic::get_verb(&topic);
-    println!("{} {}", verb, value);
+    timeloop::timeloop(start, end, start_text, end_text, verbose);
 }

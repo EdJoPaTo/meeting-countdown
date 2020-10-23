@@ -2,29 +2,27 @@ use chrono::{DateTime, Local, Timelike};
 use std::thread::sleep;
 use std::time::Duration;
 
+use crate::publish::publish;
 use crate::topic::Topic;
 
 mod math;
 
 pub const TIMEFORMAT: &str = "%_H:%M:%S";
 
-pub fn timeloop<F>(
+pub fn timeloop(
     start: DateTime<chrono::Local>,
     end: DateTime<chrono::Local>,
     start_text: Option<&str>,
     end_text: &str,
     verbose: bool,
-    publish: F,
-) where
-    F: Fn(Topic, &str),
-{
+) {
     if let Some(duration) = math::duration_until(Local::now(), start) {
         println!("wait till start");
 
         if let Some(text) = start_text {
-            publish(Topic::Hue, "240");
-            publish(Topic::Sat, "100");
-            publish(Topic::Text, text);
+            publish(&Topic::Hue, "240");
+            publish(&Topic::Sat, "100");
+            publish(&Topic::Text, text);
         }
 
         sleep(duration);
@@ -60,9 +58,9 @@ pub fn timeloop<F>(
             format!("{:2}sec", remaining_seconds)
         };
 
-        publish(Topic::Text, &text);
-        publish(Topic::Hue, &format!("{}", hue));
-        publish(Topic::Sat, "100");
+        publish(&Topic::Text, &text);
+        publish(&Topic::Hue, &format!("{}", hue));
+        publish(&Topic::Sat, "100");
 
         let modulo = if remaining_seconds <= 20 {
             1
@@ -78,9 +76,9 @@ pub fn timeloop<F>(
         println!("# {} end!", Local::now().format(TIMEFORMAT));
     }
 
-    publish(Topic::Text, end_text);
-    publish(Topic::Hue, "240");
-    publish(Topic::Sat, "100");
+    publish(&Topic::Text, end_text);
+    publish(&Topic::Hue, "240");
+    publish(&Topic::Sat, "100");
 }
 
 fn sleep_until_second(modulo: u32) {
