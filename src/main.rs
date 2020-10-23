@@ -5,7 +5,7 @@ mod timeloop;
 mod topic;
 
 fn main() {
-    let matches = cli::build_cli().get_matches();
+    let matches = cli::build().get_matches();
 
     let verbose = matches.is_present("verbose");
 
