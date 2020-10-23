@@ -10,13 +10,13 @@ mod math;
 pub const TIMEFORMAT: &str = "%_H:%M:%S";
 
 pub fn timeloop(
-    start: DateTime<chrono::Local>,
-    end: DateTime<chrono::Local>,
+    start: &DateTime<chrono::Local>,
+    end: &DateTime<chrono::Local>,
     start_text: Option<&str>,
     end_text: &str,
     verbose: bool,
 ) {
-    if let Some(duration) = math::duration_until(Local::now(), start) {
+    if let Some(duration) = math::duration_until(&Local::now(), &start) {
         println!("wait till start");
 
         if let Some(text) = start_text {

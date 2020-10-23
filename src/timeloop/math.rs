@@ -14,8 +14,8 @@ pub fn interpolate(start: i64, end: i64, position: f64) -> i64 {
 }
 
 pub fn duration_until<TzFrom, TzUntil>(
-    from: DateTime<TzFrom>,
-    until: DateTime<TzUntil>,
+    from: &DateTime<TzFrom>,
+    until: &DateTime<TzUntil>,
 ) -> Option<Duration>
 where
     TzFrom: TimeZone,
@@ -64,14 +64,15 @@ fn interpolate_half() {
 fn duration_until_past_is_none() {
     let from = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
     let until = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
-
-    assert_eq!(None, duration_until(from, until))
+    assert_eq!(None, duration_until(&from, &until));
 }
 
 #[test]
 fn duration_until_future_works() {
     let from = DateTime::parse_from_rfc3339("2020-10-12T20:00:00+00:00").unwrap();
     let until = DateTime::parse_from_rfc3339("2020-10-12T20:02:00+00:00").unwrap();
-
-    assert_eq!(Some(Duration::from_secs(120)), duration_until(from, until))
+    assert_eq!(
+        Some(Duration::from_secs(120)),
+        duration_until(&from, &until)
+    );
 }

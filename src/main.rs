@@ -38,5 +38,5 @@ fn main() {
     println!("# Start: {}", start.to_string());
     println!("# End:   {}", end.to_string());
 
-    timeloop::timeloop(start, end, start_text, end_text, verbose);
+    timeloop::timeloop(&start, &end, start_text, end_text, verbose);
 }
