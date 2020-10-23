@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-cargo-lint-target-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run clippy
-        run: cargo clippy --verbose
+        run: cargo clippy --verbose --all-targets --all-features -- -D warnings
       - name: Check format
         run: cargo fmt -- --check --verbose
 
@@ -135,13 +135,13 @@ jobs:
           ls -al target
           ls -al target/*
 
-      - name: Release Artifact (linux, mac)
+      - name: Publish Artifact (linux, mac)
         if: runner.os == 'Linux' || runner.os == 'macOS'
         uses: actions/upload-artifact@v2
         with:
           name: meeting-countdown-${{ matrix.config.triple }}
           path: target/${{ matrix.config.triple }}/release/meeting-countdown
-      - name: Release Artifact (windows)
+      - name: Publish Artifact (windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v2
         with:
