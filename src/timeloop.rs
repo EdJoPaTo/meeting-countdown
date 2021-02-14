@@ -31,10 +31,13 @@ pub fn timeloop(
     loop {
         let now = Local::now();
         let remaining_seconds = end.timestamp() - now.timestamp();
-        let remaining_minutes = remaining_seconds / 60;
         if remaining_seconds <= 0 {
             break;
         }
+
+        #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
+        let remaining_seconds = remaining_seconds as u32;
+        let remaining_minutes = remaining_seconds / 60;
 
         let position =
             math::calc_relative_position(start.timestamp(), end.timestamp(), now.timestamp());
