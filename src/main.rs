@@ -26,6 +26,11 @@ fn main() {
         .value_of("end text")
         .expect("end text could not be read from command line");
 
+    let blink_near_end_seconds = matches
+        .value_of("near end blink")
+        .and_then(|s| s.parse::<u32>().ok())
+        .expect("blink seconds could not be read from command line");
+
     let now = Local::now();
 
     if end.timestamp() - start.timestamp() <= 0 || end.timestamp() - now.timestamp() <= 0 {
@@ -38,5 +43,12 @@ fn main() {
     println!("# Start: {}", start.to_string());
     println!("# End:   {}", end.to_string());
 
-    timeloop::timeloop(&start, &end, start_text, end_text, verbose);
+    timeloop::timeloop(
+        &start,
+        &end,
+        start_text,
+        end_text,
+        blink_near_end_seconds,
+        verbose,
+    );
 }

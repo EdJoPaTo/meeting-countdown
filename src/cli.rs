@@ -40,6 +40,14 @@ pub fn build() -> App<'static, 'static> {
                 .help("Text which is displayed when the countdown ends.")
                 .default_value("Meeting is over. Have a nice day!"),
         )
+        .arg(
+            Arg::with_name("near end blink")
+                .long("blink")
+                .value_name("INT")
+                .takes_value(true)
+                .default_value("300")
+                .help("Seconds before end where the time should blink. 0 to disable"),
+        )
 }
 
 pub fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {

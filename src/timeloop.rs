@@ -14,6 +14,7 @@ pub fn timeloop(
     end: &DateTime<chrono::Local>,
     start_text: Option<&str>,
     end_text: &str,
+    blink_near_end_seconds: u32,
     verbose: bool,
 ) {
     if let Some(duration) = math::duration_until(&Local::now(), &start) {
@@ -53,6 +54,19 @@ pub fn timeloop(
             );
         }
 
+        let modulo = if remaining_seconds <= 20 {
+            1
+        } else if remaining_seconds <= blink_near_end_seconds {
+            2
+        } else if remaining_seconds < 100 {
+            5
+        } else {
+            30
+        };
+
+        let on =
+            remaining_seconds > blink_near_end_seconds || (remaining_seconds % (modulo * 2)) == 0;
+
         let text = if remaining_seconds <= 99 {
             format!("{:2}sec", remaining_seconds)
         } else if remaining_minutes <= 99 {
@@ -61,17 +75,15 @@ pub fn timeloop(
             format!("{:4}m", remaining_minutes)
         };
 
-        publish(&Topic::Text, &text);
-        publish(&Topic::Hue, &format!("{}", hue));
-        publish(&Topic::Sat, "100");
-
-        let modulo = if remaining_seconds <= 20 {
-            1
-        } else if remaining_seconds < 100 {
-            5
+        if on {
+            publish(&Topic::Text, &text);
+            publish(&Topic::Hue, &format!("{}", hue));
+            publish(&Topic::Sat, "100");
+            publish(&Topic::On, "1");
         } else {
-            30
-        };
+            publish(&Topic::On, "0");
+        }
+
         sleep_until_second(modulo);
     }
 
@@ -82,6 +94,7 @@ pub fn timeloop(
     publish(&Topic::Text, end_text);
     publish(&Topic::Hue, "240");
     publish(&Topic::Sat, "100");
+    publish(&Topic::On, "1");
 }
 
 fn sleep_until_second(modulo: u32) {
