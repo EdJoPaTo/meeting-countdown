@@ -18,7 +18,7 @@ meeting-countdown --verbose 10:00 11:30 | led-matrix-remote http
 ```
 
 ```plaintext
-Meeting Countdown 0.3.0
+Meeting Countdown 0.4.0
 EdJoPaTo <meeting-countdown-rust@edjopato.de>
 Prints out the rest time of a meeting compatible for led-matrix-remote
 
@@ -32,6 +32,7 @@ FLAGS:
 
 OPTIONS:
         --end-text <STRING>      Text which is displayed when the countdown ends. [default: Meeting is over. Have a nice day!]
+        --blink <INT>            Seconds before end where the time should blink. 0 to disable [default: 300]
         --start-text <STRING>    Text which is displayed before countdown starts.
 
 ARGS:
