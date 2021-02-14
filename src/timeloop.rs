@@ -50,12 +50,12 @@ pub fn timeloop(
             );
         }
 
-        let text = if remaining_minutes > 99 {
-            format!("{:4}m", remaining_minutes)
-        } else if remaining_seconds > 99 {
+        let text = if remaining_seconds <= 99 {
+            format!("{:2}sec", remaining_seconds)
+        } else if remaining_minutes <= 99 {
             format!("{:2}min", remaining_minutes)
         } else {
-            format!("{:2}sec", remaining_seconds)
+            format!("{:4}m", remaining_minutes)
         };
 
         publish(&Topic::Text, &text);
