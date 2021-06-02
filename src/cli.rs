@@ -1,4 +1,3 @@
-use chrono::{DateTime, Local, NaiveTime};
 use clap::{App, AppSettings, Arg};
 
 pub fn build() -> App<'static, 'static> {
@@ -48,16 +47,4 @@ pub fn build() -> App<'static, 'static> {
                 .default_value("300")
                 .help("Seconds before end where the time should blink. 0 to disable"),
         )
-}
-
-pub fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {
-    let today = chrono::offset::Local::now().date();
-    let fmt = if timestring.len() > 5 {
-        "%H:%M:%S"
-    } else {
-        "%H:%M"
-    };
-    NaiveTime::parse_from_str(timestring, fmt)
-        .ok()
-        .and_then(|t| today.and_time(t))
 }

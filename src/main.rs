@@ -1,4 +1,4 @@
-use chrono::{Duration, Local};
+use chrono::{DateTime, Duration, Local, NaiveTime};
 
 mod cli;
 mod publish;
@@ -12,12 +12,12 @@ fn main() {
 
     let start = matches
         .value_of("starttime")
-        .and_then(cli::time_string_to_date_time)
+        .and_then(time_string_to_date_time)
         .expect("starttime could not be read from the command line");
 
     let mut end = matches
         .value_of("endtime")
-        .and_then(cli::time_string_to_date_time)
+        .and_then(time_string_to_date_time)
         .expect("endtime could not be read from the command line");
 
     let start_text = matches.value_of("start text");
@@ -51,4 +51,16 @@ fn main() {
         blink_near_end_seconds,
         verbose,
     );
+}
+
+fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {
+    let today = chrono::offset::Local::now().date();
+    let fmt = if timestring.len() > 5 {
+        "%H:%M:%S"
+    } else {
+        "%H:%M"
+    };
+    NaiveTime::parse_from_str(timestring, fmt)
+        .ok()
+        .and_then(|t| today.and_time(t))
 }
