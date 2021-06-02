@@ -20,3 +20,6 @@ chrono = "0.4"
 [dependencies.clap]
 version = "2.33"
 features = ["wrap_help"]
+
+[dev-dependencies]
+float_eq = "0.6"

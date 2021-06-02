@@ -37,15 +37,15 @@ where
 
 #[test]
 fn calc_relative_position_start() {
-    assert!((0.0 - calc_relative_position(2, 4, 2)).abs() < f64::EPSILON);
+    float_eq::assert_float_eq!(0.0, calc_relative_position(2, 4, 2), abs <= 0.1);
 }
 #[test]
 fn calc_relative_position_end() {
-    assert!((1.0 - calc_relative_position(2, 4, 4)).abs() < f64::EPSILON);
+    float_eq::assert_float_eq!(1.0, calc_relative_position(2, 4, 4), abs <= 0.1);
 }
 #[test]
 fn calc_relative_position_half() {
-    assert!((0.5 - calc_relative_position(2, 4, 3)).abs() < f64::EPSILON);
+    float_eq::assert_float_eq!(0.5, calc_relative_position(2, 4, 3), abs <= 0.1);
 }
 
 #[test]
