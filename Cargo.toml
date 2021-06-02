@@ -3,6 +3,7 @@ name = "meeting-countdown"
 description = "Prints out the rest time of a meeting compatible for led-matrix-remote"
 version = "0.4.0"
 license = "MIT"
+repository = "https://github.com/EdJoPaTo/meeting-countdown"
 authors = ["EdJoPaTo <meeting-countdown-rust@edjopato.de>"]
 edition = "2018"
 
