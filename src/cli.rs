@@ -1,11 +1,12 @@
 use clap::{App, AppSettings, Arg};
 
+#[must_use]
 pub fn build() -> App<'static, 'static> {
     App::new("Meeting Countdown")
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(env!("CARGO_PKG_DESCRIPTION"))
-        .setting(AppSettings::ColoredHelp)
+        .global_setting(AppSettings::ColoredHelp)
         .arg(
             Arg::with_name("verbose")
                 .short("v")
