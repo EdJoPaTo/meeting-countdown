@@ -8,33 +8,46 @@ jobs:
   test:
     name: Test ${{ matrix.os }} ${{ matrix.toolchain }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.toolchain == 'nightly' }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         include:
+          # Check the 3 platforms and ensure there is not even a single warning
           - os: ubuntu-latest
             toolchain: stable
             clippyargs: -D clippy::pedantic -D warnings
+            experimental: false
           - os: macOS-latest
             toolchain: stable
             clippyargs: -D clippy::pedantic -D warnings
+            experimental: false
           - os: windows-latest
             toolchain: stable
             clippyargs: -D clippy::pedantic -D warnings
+            experimental: false
 
+          # Check beta/nightly (potentially buggy) and maybe get some glances on soon to be lints
+          - os: ubuntu-latest
+            toolchain: beta
+            clippyargs: -W clippy::pedantic
+            experimental: true
           - os: ubuntu-latest
             toolchain: nightly
             clippyargs: -W clippy::pedantic
-          # - os: ubuntu-latest
-          #   toolchain: 1.41.1 # Debian 10 Buster
-          #   clippyargs: -W clippy::pedantic -A unknown-lints -A clippy::unknown-clippy-lints
-          # - os: ubuntu-latest
-          #   toolchain: 1.47.0 # Alpine 3.13
-          #   clippyargs: -W clippy::pedantic -A unknown-lints -A clippy::unknown-clippy-lints
-          # - os: ubuntu-latest
-          #   toolchain: 1.48.0 # Debian 11 Bullseye
-          #   clippyargs: -W clippy::pedantic -A unknown-lints -A clippy::unknown-clippy-lints
+            experimental: true
+
+          # Check if it is still running on older Rust versions.
+          # Sometimes they dont have lint bugfixes which results in false positives -> Dont error, just warn.
+          # Also some specified lints are not yet existing in the older rust version -> allow unknown lints.
+          - os: ubuntu-latest
+            toolchain: 1.48.0 # Debian 11 Bullseye
+            clippyargs: -A unknown-lints -A clippy::unknown-clippy-lints
+            experimental: false
+          - os: ubuntu-latest
+            toolchain: 1.52.0 # Alpine 3.14
+            clippyargs: -A unknown-lints
+            experimental: false
     steps:
       - uses: actions/checkout@v2
 
@@ -58,7 +71,7 @@ jobs:
           command: test
           args: --verbose --locked --all-features
 
-  release:
+  github-release:
     name: Release ${{ matrix.triple }}
     runs-on: ${{ matrix.os }}
     needs: test
@@ -74,15 +87,16 @@ jobs:
             triple: armv7-unknown-linux-gnueabihf
           - os: ubuntu-latest
             triple: aarch64-unknown-linux-gnu
+
           - os: macOS-latest
             triple: x86_64-apple-darwin
           - os: macOS-latest
             triple: aarch64-apple-darwin
+
           - os: windows-latest
             triple: x86_64-pc-windows-msvc
           - os: windows-latest
             triple: aarch64-pc-windows-msvc
-
     steps:
       - uses: actions/checkout@v2
         with:
@@ -107,7 +121,7 @@ jobs:
           target: ${{ matrix.triple }}
           toolchain: stable
 
-      - name: Build release
+      - name: Build
         uses: actions-rs/cargo@v1
         env:
           # TODO: Remove this once it's the default
@@ -117,16 +131,16 @@ jobs:
           args: --release --verbose --locked --all-features --target ${{ matrix.triple }}
           use-cross: ${{ runner.os == 'Linux' && matrix.triple != 'x86_64-unknown-linux-gnu' }}
 
-      - name: Pack release (-nix)
+      - name: Package (-nix)
         if: runner.os != 'Windows'
         run: >
           tar --gzip -cvf ${{ env.ARTIFACT_NAME }}.tar.gz
-          completions LICENSE
+          completions LICENSE README.md
           -C target/${{ matrix.triple }}/release meeting-countdown
-      - name: Pack release (windows)
+      - name: Package (windows)
         if: runner.os == 'Windows'
         run: |
-          7z a ${{ env.ARTIFACT_NAME }}.zip completions LICENSE
+          7z a ${{ env.ARTIFACT_NAME }}.zip completions LICENSE README.md
           cd target/${{ matrix.triple }}/release
           7z a ../../../${{ env.ARTIFACT_NAME }}.zip meeting-countdown.exe
           cd -
@@ -139,11 +153,10 @@ jobs:
             *.zip
             *.tar.gz
 
-      - name: GH Release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
           files: |
             *.zip
             *.tar.gz
