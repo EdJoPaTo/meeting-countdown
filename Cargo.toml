@@ -25,4 +25,4 @@ version = "2"
 features = ["wrap_help"]
 
 [dev-dependencies]
-float_eq = "0.6"
+float_eq = "0.7"
