@@ -1,51 +1,58 @@
-use clap::{App, AppSettings, Arg};
+use clap::{app_from_crate, App, Arg, ValueHint};
 
 #[must_use]
-pub fn build() -> App<'static, 'static> {
-    App::new("Meeting Countdown")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .about(env!("CARGO_PKG_DESCRIPTION"))
-        .global_setting(AppSettings::ColoredHelp)
+pub fn build() -> App<'static> {
+    app_from_crate!()
+        .name("Meeting Countdown")
         .arg(
-            Arg::with_name("verbose")
-                .short("v")
+            Arg::new("verbose")
+                .short('v')
                 .long("verbose")
                 .help("Show each time tick on stdout"),
         )
         .arg(
-            Arg::with_name("starttime")
-                .required(true)
+            Arg::new("starttime")
                 .value_name("STARTTIME")
+                .value_hint(ValueHint::Other)
+                .required(true)
                 .help("Start time of the Meeting. From then the remaining time is published."),
         )
         .arg(
-            Arg::with_name("endtime")
-                .required(true)
+            Arg::new("endtime")
                 .value_name("ENDTIME")
+                .value_hint(ValueHint::Other)
+                .required(true)
                 .help("End time of the Meeting. Until then the remaining time is published."),
         )
         .arg(
-            Arg::with_name("start text")
+            Arg::new("start text")
                 .long("start-text")
                 .value_name("STRING")
+                .value_hint(ValueHint::Other)
                 .takes_value(true)
                 .help("Text which is displayed before countdown starts."),
         )
         .arg(
-            Arg::with_name("end text")
+            Arg::new("end text")
                 .long("end-text")
+                .value_hint(ValueHint::Other)
                 .value_name("STRING")
                 .takes_value(true)
-                .help("Text which is displayed when the countdown ends.")
-                .default_value("Meeting is over. Have a nice day!"),
+                .default_value("Meeting is over. Have a nice day!")
+                .help("Text which is displayed when the countdown ends."),
         )
         .arg(
-            Arg::with_name("near end blink")
+            Arg::new("near end blink")
                 .long("blink")
                 .value_name("INT")
+                .value_hint(ValueHint::Other)
                 .takes_value(true)
                 .default_value("300")
                 .help("Seconds before end where the time should blink. 0 to disable"),
         )
+}
+
+#[test]
+fn verify_app() {
+    build().debug_assert();
 }
