@@ -39,9 +39,9 @@ fn main() {
             .expect("failed to assume end date tomorrow");
     }
 
-    println!("# Now:   {}", now.to_string());
-    println!("# Start: {}", start.to_string());
-    println!("# End:   {}", end.to_string());
+    println!("# Now:   {}", now);
+    println!("# Start: {}", start);
+    println!("# End:   {}", end);
 
     timeloop::timeloop(
         &start,

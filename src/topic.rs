@@ -6,7 +6,7 @@ pub enum Topic {
     Text,
 }
 
-pub fn get_verb(topic: &Topic) -> &'static str {
+pub const fn get_verb(topic: &Topic) -> &'static str {
     match topic {
         Topic::On => "on",
         Topic::Hue => "hue",
