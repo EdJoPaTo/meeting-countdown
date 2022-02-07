@@ -17,7 +17,7 @@ pub fn timeloop(
     blink_near_end_seconds: u32,
     verbose: bool,
 ) {
-    if let Some(duration) = math::duration_until(&Local::now(), start) {
+    if let Ok(duration) = start.signed_duration_since(Local::now()).to_std() {
         println!("wait till start");
 
         if let Some(text) = start_text {
