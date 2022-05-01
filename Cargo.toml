@@ -18,8 +18,20 @@ clap = { version = "3", features = ["cargo"] }
 clap_complete = "3"
 
 [dependencies]
+anyhow = "1"
+bracket-color = "0.8"
 chrono = "0.4"
 clap = { version = "3", features = ["cargo", "wrap_help"] }
+embedded-graphics = "0.7"
+retry = { version = "1", default-features = false }
+ureq = "2"
+url = "2"
+
+[dependencies.esp-wlan-led-matrix-client]
+git = "https://github.com/EdJoPaTo/esp-wlan-led-matrix-rust-client"
+branch = "main"
+default-features = false
+features = ["embedded-graphics-impl"]
 
 [dev-dependencies]
 float_eq = "0.7"
