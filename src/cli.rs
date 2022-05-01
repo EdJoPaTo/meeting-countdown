@@ -1,8 +1,8 @@
-use clap::{app_from_crate, App, Arg, ValueHint};
+use clap::{command, Arg, Command, ValueHint};
 
 #[must_use]
-pub fn build() -> App<'static> {
-    app_from_crate!()
+pub fn build() -> Command<'static> {
+    command!()
         .name("Meeting Countdown")
         .arg(
             Arg::new("verbose")
@@ -53,6 +53,6 @@ pub fn build() -> App<'static> {
 }
 
 #[test]
-fn verify_app() {
+fn verify() {
     build().debug_assert();
 }
