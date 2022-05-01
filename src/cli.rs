@@ -1,5 +1,6 @@
 use clap::{command, Arg, Command, ValueHint};
 
+#[allow(clippy::too_many_lines)]
 #[must_use]
 pub fn build() -> Command<'static> {
     command!()
