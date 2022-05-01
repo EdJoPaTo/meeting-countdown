@@ -6,12 +6,6 @@ pub fn build() -> Command<'static> {
     command!()
         .name("Meeting Countdown")
         .arg(
-            Arg::new("verbose")
-                .short('v')
-                .long("verbose")
-                .help("Show each time tick on stdout"),
-        )
-        .arg(
             Arg::new("starttime")
                 .value_name("STARTTIME")
                 .value_hint(ValueHint::Other)
@@ -26,30 +20,25 @@ pub fn build() -> Command<'static> {
                 .help("End time of the Meeting. Until then the remaining time is published."),
         )
         .arg(
-            Arg::new("start text")
-                .long("start-text")
-                .value_name("STRING")
-                .value_hint(ValueHint::Other)
-                .takes_value(true)
-                .help("Text which is displayed before countdown starts."),
+            Arg::new("pixelmatrix")
+                .long("pixelmatrix")
+                .env("MEETING_PIXELMATRIX")
+                .value_name("ADDR")
+                .value_hint(ValueHint::Hostname)
+                .required_unless_present("pixelmatrix")
+                .help("Target Pixelmatrix Address to display the rest time to")
+                .long_help("Target Pixelmatrix Address to display the rest time to. Looks like `espPixelmatrix:1337`.\nSee https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix"),
         )
         .arg(
-            Arg::new("end text")
-                .long("end-text")
-                .value_hint(ValueHint::Other)
-                .value_name("STRING")
-                .takes_value(true)
-                .default_value("Meeting is over. Have a nice day!")
-                .help("Text which is displayed when the countdown ends."),
-        )
-        .arg(
-            Arg::new("near end blink")
-                .long("blink")
-                .value_name("INT")
-                .value_hint(ValueHint::Other)
-                .takes_value(true)
-                .default_value("300")
-                .help("Seconds before end where the time should blink. 0 to disable"),
+            Arg::new("http-textmatrix")
+                .long("http-textmatrix")
+                .env("MEETING_HTTP_TEXTMATRIX")
+                .value_name("URL")
+                .value_hint(ValueHint::Url)
+                .required_unless_present("pixelmatrix")
+                .help("Target HTTP Textmatrix Address to display the rest time to")
+                .long_help("Target HTTP Textmatrix Address to display the rest time to. Looks like `http://esp-matrix/`.\nSee https://github.com/EdJoPaTo/esp-http-neomatrix-text")
+
         )
 }
 

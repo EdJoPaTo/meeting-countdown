@@ -1,17 +1,16 @@
 use chrono::{DateTime, Duration, Local, NaiveTime};
+use url::Url;
+
+use crate::display::{Display, Pixelmatrix};
 
 mod cli;
 mod display;
 mod math;
-mod publish;
 mod remaining;
 mod timeloop;
-mod topic;
 
 fn main() {
     let matches = cli::build().get_matches();
-
-    let verbose = matches.is_present("verbose");
 
     let start = matches
         .value_of("starttime")
@@ -23,17 +22,6 @@ fn main() {
         .and_then(time_string_to_date_time)
         .expect("endtime could not be read from the command line");
 
-    let start_text = matches.value_of("start text");
-
-    let end_text = matches
-        .value_of("end text")
-        .expect("end text could not be read from command line");
-
-    let blink_near_end_seconds = matches
-        .value_of("near end blink")
-        .and_then(|s| s.parse::<u32>().ok())
-        .expect("blink seconds could not be read from command line");
-
     let now = Local::now();
 
     if end.timestamp() - start.timestamp() <= 0 || end.timestamp() - now.timestamp() <= 0 {
@@ -42,18 +30,30 @@ fn main() {
             .expect("failed to assume end date tomorrow");
     }
 
-    println!("# Now:   {}", now);
-    println!("# Start: {}", start);
-    println!("# End:   {}", end);
+    let display = {
+        let mut displays: Vec<Box<dyn Display>> = Vec::new();
 
-    timeloop::timeloop(
-        &start,
-        &end,
-        start_text,
-        end_text,
-        blink_near_end_seconds,
-        verbose,
-    );
+        if let Some(addr) = matches.value_of("pixelmatrix") {
+            let target = Pixelmatrix::new(addr).expect("failed to connect to pixelmatrix");
+            displays.push(Box::new(target));
+        }
+
+        if let Some(url) = matches.value_of("http-textmatrix") {
+            let url = Url::parse(url).expect("http-textmatrix has invalid url");
+            let target = display::Retry::new(
+                display::HttpMatrix::new(&url).expect("failed to connect to http textmatrix"),
+            );
+            displays.push(Box::new(target));
+        }
+
+        display::Multiple::new(displays)
+    };
+
+    println!("Now:   {}", now);
+    println!("Start: {}", start);
+    println!("End:   {}", end);
+
+    timeloop::timeloop(&start, &end, display);
 }
 
 fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {

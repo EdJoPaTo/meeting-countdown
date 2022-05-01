@@ -5,13 +5,22 @@ pub enum Remaining {
     Seconds(u8),
 }
 
-impl From<std::time::Duration> for Remaining {
-    #[allow(clippy::cast_possible_truncation)]
-    fn from(duration: std::time::Duration) -> Self {
-        const NINETY_MINUTES: u64 = 60 * 90;
-        const MAX_HOURS: u64 = 255 * 60 * 60;
+impl Remaining {
+    /// Returns the update interval in seconds
+    pub const fn update_interval(self) -> u32 {
+        match self {
+            Remaining::Seconds(s) if s <= 20 => 1,
+            Remaining::Seconds(_) => 5,
+            Remaining::Minutes(m) if m <= 2 => 5,
+            Remaining::Minutes(_) | Remaining::Hours(_) => 30,
+        }
+    }
+}
 
-        let total_seconds = duration.as_secs();
+impl From<std::time::Duration> for Remaining {
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    fn from(duration: std::time::Duration) -> Self {
+        let total_seconds = duration.as_secs_f32().round() as u64;
         if total_seconds <= 90 {
             return Self::Seconds(total_seconds as u8);
         }

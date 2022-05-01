@@ -46,6 +46,7 @@ impl Display for Pixelmatrix {
         )
         .draw(&mut self.client)?;
 
+        self.client.flush()?;
         Ok(())
     }
 
