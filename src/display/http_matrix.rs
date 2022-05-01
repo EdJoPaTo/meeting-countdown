@@ -24,6 +24,9 @@ impl HttpMatrix {
             .timeout(Duration::from_millis(100))
             .build();
 
+        // check if the remote exists and works
+        agent.get(url.as_str()).call()?;
+
         Ok(Self {
             agent,
             set_on,
