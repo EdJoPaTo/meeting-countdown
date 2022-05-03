@@ -40,7 +40,8 @@ impl HttpMatrix {
 impl Display for HttpMatrix {
     fn show_remaining(&mut self, percentage: f32, remaining: Remaining) -> anyhow::Result<()> {
         let text = match remaining {
-            Remaining::Hours(hours) => format!("{:>4}h", hours),
+            Remaining::ManyHours(hours) => format!("{:>4}h", hours),
+            Remaining::SingleDigitHours(hours, minutes) => format!("{}:{:02}h", hours, minutes),
             Remaining::Minutes(min) if min >= 100 => format!("{:>4}m", min),
             Remaining::Minutes(min) => format!("{:>2}min", min),
             Remaining::Seconds(sec) if sec >= 100 => format!("{:>4}s", sec),

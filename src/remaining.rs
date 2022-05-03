@@ -1,6 +1,8 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Remaining {
-    Hours(u8),
+    ManyHours(u8),
+    /// Hours, Minutes
+    SingleDigitHours(u8, u8),
     Minutes(u8),
     Seconds(u8),
 }
@@ -12,7 +14,7 @@ impl Remaining {
             Remaining::Seconds(s) if s <= 20 => 1,
             Remaining::Seconds(_) => 5,
             Remaining::Minutes(m) if m <= 2 => 5,
-            Remaining::Minutes(_) | Remaining::Hours(_) => 30,
+            _ => 30,
         }
     }
 }
@@ -34,7 +36,12 @@ impl From<std::time::Duration> for Remaining {
         let hours = total_hours
             .try_into()
             .expect("More than 2^8 hours aren't possible with this tool");
-        Self::Hours(hours)
+        if hours <= 9 {
+            let minutes = total_minutes % 60;
+            Self::SingleDigitHours(hours, minutes as u8)
+        } else {
+            Self::ManyHours(hours)
+        }
     }
 }
 
@@ -51,7 +58,13 @@ fn std_duration_minutes() {
 }
 
 #[test]
-fn std_duration_hours() {
+fn std_duration_single_digit_hours() {
+    let remaining: Remaining = std::time::Duration::from_secs(150 * 60).into();
+    assert_eq!(remaining, Remaining::SingleDigitHours(2, 30));
+}
+
+#[test]
+fn std_duration_many_hours() {
     let remaining: Remaining = std::time::Duration::from_secs(70 * 60 * 60).into();
-    assert_eq!(remaining, Remaining::Hours(70));
+    assert_eq!(remaining, Remaining::ManyHours(70));
 }
