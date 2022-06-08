@@ -34,4 +34,4 @@ default-features = false
 features = ["embedded-graphics-impl"]
 
 [dev-dependencies]
-float_eq = "0.7"
+float_eq = "1.0"
