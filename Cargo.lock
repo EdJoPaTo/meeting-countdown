@@ -174,7 +174,7 @@ dependencies = [
 [[package]]
 name = "esp-wlan-led-matrix-client"
 version = "0.1.0"
-source = "git+https://github.com/EdJoPaTo/esp-wlan-led-matrix-rust-client?branch=main#5a5d2b87d945cde0945a38b62b0afa5d48165c6f"
+source = "git+https://github.com/EdJoPaTo/esp-wlan-led-matrix-rust-client?branch=main#19ea9feea4e7b6dbe418bfb5ccc7112210b4050b"
 dependencies = [
  "bufstream",
  "embedded-graphics",
