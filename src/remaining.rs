@@ -11,9 +11,9 @@ impl Remaining {
     /// Returns the update interval in seconds
     pub const fn update_interval(self) -> u32 {
         match self {
-            Remaining::Seconds(s) if s <= 20 => 1,
-            Remaining::Seconds(_) => 5,
-            Remaining::Minutes(m) if m <= 2 => 5,
+            Self::Seconds(s) if s <= 20 => 1,
+            Self::Seconds(_) => 5,
+            Self::Minutes(m) if m <= 2 => 5,
             _ => 30,
         }
     }

@@ -6,7 +6,7 @@ pub struct Retry<D: Display> {
 }
 
 impl<D: Display> Retry<D> {
-    pub fn new(display: D) -> Self {
+    pub const fn new(display: D) -> Self {
         Self { other: display }
     }
 }
