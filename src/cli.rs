@@ -1,4 +1,5 @@
-use clap::{command, Arg, Command, ValueHint};
+use clap::{command, value_parser, Arg, Command, ValueHint};
+use url::Url;
 
 #[allow(clippy::too_many_lines)]
 #[must_use]
@@ -35,6 +36,7 @@ pub fn build() -> Command<'static> {
                 .env("MEETING_HTTP_TEXTMATRIX")
                 .value_name("URL")
                 .value_hint(ValueHint::Url)
+                .value_parser(value_parser!(Url))
                 .required_unless_present("pixelmatrix")
                 .help("Target HTTP Textmatrix Address to display the rest time to")
                 .long_help("Target HTTP Textmatrix Address to display the rest time to. Looks like `http://esp-matrix/`.\nSee https://github.com/EdJoPaTo/esp-http-neomatrix-text")

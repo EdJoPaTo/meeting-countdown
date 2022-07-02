@@ -13,12 +13,12 @@ fn main() {
     let matches = cli::build().get_matches();
 
     let start = matches
-        .value_of("starttime")
+        .get_one::<String>("starttime")
         .and_then(time_string_to_date_time)
         .expect("starttime could not be read from the command line");
 
     let mut end = matches
-        .value_of("endtime")
+        .get_one::<String>("endtime")
         .and_then(time_string_to_date_time)
         .expect("endtime could not be read from the command line");
 
@@ -33,15 +33,14 @@ fn main() {
     let display = {
         let mut displays: Vec<Box<dyn Display>> = Vec::new();
 
-        if let Some(addr) = matches.value_of("pixelmatrix") {
+        if let Some(addr) = matches.get_one::<String>("pixelmatrix") {
             let target = Pixelmatrix::new(addr).expect("failed to connect to pixelmatrix");
             displays.push(Box::new(target));
         }
 
-        if let Some(url) = matches.value_of("http-textmatrix") {
-            let url = Url::parse(url).expect("http-textmatrix has invalid url");
+        if let Some(url) = matches.get_one::<Url>("http-textmatrix") {
             let target = display::Retry::new(
-                display::HttpMatrix::new(&url).expect("failed to connect to http textmatrix"),
+                display::HttpMatrix::new(url).expect("failed to connect to http textmatrix"),
             );
             displays.push(Box::new(target));
         }
@@ -56,7 +55,7 @@ fn main() {
     timeloop::timeloop(&start, &end, display);
 }
 
-fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {
+fn time_string_to_date_time(timestring: &String) -> Option<DateTime<Local>> {
     let today = chrono::offset::Local::now().date();
     let fmt = if timestring.len() > 5 {
         "%H:%M:%S"
