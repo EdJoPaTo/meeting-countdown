@@ -19,7 +19,7 @@ impl<'a> Display for Multiple<'a> {
     fn show_remaining(&mut self, percentage: f32, remaining: Remaining) -> anyhow::Result<()> {
         for display in &mut self.displays {
             if let Err(err) = display.show_remaining(percentage, remaining) {
-                println!("Display Error {}", err);
+                println!("Display Error {err}");
             }
         }
         Ok(())
@@ -28,7 +28,7 @@ impl<'a> Display for Multiple<'a> {
     fn clear(&mut self) -> anyhow::Result<()> {
         for display in &mut self.displays {
             if let Err(err) = display.clear() {
-                println!("Display Error {}", err);
+                println!("Display Error {err}");
             }
         }
         Ok(())

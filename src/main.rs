@@ -48,9 +48,9 @@ fn main() {
         display::Multiple::new(displays)
     };
 
-    println!("Now:   {}", now);
-    println!("Start: {}", start);
-    println!("End:   {}", end);
+    println!("Now:   {now}");
+    println!("Start: {start}");
+    println!("End:   {end}");
 
     timeloop::timeloop(&start, &end, display);
 }

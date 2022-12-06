@@ -40,12 +40,12 @@ impl HttpMatrix {
 impl Display for HttpMatrix {
     fn show_remaining(&mut self, percentage: f32, remaining: Remaining) -> anyhow::Result<()> {
         let text = match remaining {
-            Remaining::ManyHours(hours) => format!("{:>4}h", hours),
-            Remaining::SingleDigitHours(hours, minutes) => format!("{}:{:02}h", hours, minutes),
-            Remaining::Minutes(min) if min >= 100 => format!("{:>4}m", min),
-            Remaining::Minutes(min) => format!("{:>2}min", min),
-            Remaining::Seconds(sec) if sec >= 100 => format!("{:>4}s", sec),
-            Remaining::Seconds(sec) => format!("{:>2}sec", sec),
+            Remaining::ManyHours(hours) => format!("{hours:>4}h"),
+            Remaining::SingleDigitHours(hours, minutes) => format!("{hours}:{minutes:02}h"),
+            Remaining::Minutes(min) if min >= 100 => format!("{min:>4}m"),
+            Remaining::Minutes(min) => format!("{min:>2}min"),
+            Remaining::Seconds(sec) if sec >= 100 => format!("{sec:>4}s"),
+            Remaining::Seconds(sec) => format!("{sec:>2}sec"),
         };
         let hue = interpolate_u16(80, 0, percentage);
 

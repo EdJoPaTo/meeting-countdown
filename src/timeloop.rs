@@ -21,9 +21,7 @@ pub fn timeloop<D: Display>(
 
     loop {
         let now = Local::now();
-        let duration = if let Ok(duration) = (*end - now).to_std() {
-            duration
-        } else {
+        let Ok(duration) = (*end - now).to_std() else {
             break;
         };
 
@@ -43,7 +41,7 @@ pub fn timeloop<D: Display>(
         let update_interval = remaining.update_interval();
 
         display
-            .show_remaining(position as f32, remaining)
+            .show_remaining(position, remaining)
             .expect("failed to set display");
 
         sleep_until_second(update_interval);

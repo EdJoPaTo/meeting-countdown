@@ -24,12 +24,12 @@ impl Display for Pixelmatrix {
     #[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
     fn show_remaining(&mut self, percentage: f32, remaining: Remaining) -> anyhow::Result<()> {
         let (text, unit, x) = match remaining {
-            Remaining::ManyHours(hours) => (format!("{:>5}", hours), "h", -1),
+            Remaining::ManyHours(hours) => (format!("{hours:>5}"), "h", -1),
             Remaining::SingleDigitHours(hours, minutes) => {
-                (format!("{}:{:02}", hours, minutes), "h", 5)
+                (format!("{hours}:{minutes:02}"), "h", 5)
             }
-            Remaining::Minutes(min) => (format!("{:>3}", min), "min", 1),
-            Remaining::Seconds(sec) => (format!("{:>3}", sec), "sec", 1),
+            Remaining::Minutes(min) => (format!("{min:>3}"), "min", 1),
+            Remaining::Seconds(sec) => (format!("{sec:>3}"), "sec", 1),
         };
 
         let hue = interpolate_u16(80, 0, percentage);
