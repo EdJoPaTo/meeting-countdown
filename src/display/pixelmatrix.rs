@@ -3,7 +3,7 @@ use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::pixelcolor::Rgb888;
 use embedded_graphics::prelude::*;
 use embedded_graphics::text::Text;
-use esp_wlan_led_matrix_client::sync::Client;
+use esp_remotecontrolled_led_matrix_client::sync::Client;
 
 use crate::display::Display;
 use crate::math::{hue_to_rgb, interpolate_u16};

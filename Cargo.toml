@@ -28,8 +28,8 @@ retry = { version = "1", default-features = false }
 ureq = "2"
 url = "2"
 
-[dependencies.esp-wlan-led-matrix-client]
-git = "https://github.com/EdJoPaTo/esp-wlan-led-matrix-rust-client"
+[dependencies.esp-remotecontrolled-led-matrix-client]
+git = "https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix-rust-client"
 branch = "main"
 default-features = false
 features = ["embedded-graphics-impl"]

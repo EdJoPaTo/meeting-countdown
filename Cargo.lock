@@ -172,9 +172,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp-wlan-led-matrix-client"
+name = "esp-remotecontrolled-led-matrix-client"
 version = "0.1.0"
-source = "git+https://github.com/EdJoPaTo/esp-wlan-led-matrix-rust-client?branch=main#19ea9feea4e7b6dbe418bfb5ccc7112210b4050b"
+source = "git+https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix-rust-client?branch=main#40dbc2ee3feea065d0bc1f4b3a667938b649d3f7"
 dependencies = [
  "bufstream",
  "embedded-graphics",
@@ -297,7 +297,7 @@ dependencies = [
  "clap",
  "clap_complete",
  "embedded-graphics",
- "esp-wlan-led-matrix-client",
+ "esp-remotecontrolled-led-matrix-client",
  "float_eq",
  "retry",
  "ureq",
