@@ -56,13 +56,12 @@ fn main() {
 }
 
 fn time_string_to_date_time(timestring: &String) -> Option<DateTime<Local>> {
-    let today = chrono::offset::Local::now().date();
+    let today = Local::now().date_naive();
     let fmt = if timestring.len() > 5 {
         "%H:%M:%S"
     } else {
         "%H:%M"
     };
-    NaiveTime::parse_from_str(timestring, fmt)
-        .ok()
-        .and_then(|t| today.and_time(t))
+    let time = NaiveTime::parse_from_str(timestring, fmt).ok()?;
+    today.and_time(time).and_local_timezone(Local).single()
 }
