@@ -1,5 +1,5 @@
 use chrono::{DateTime, Duration, Local, NaiveTime};
-use url::Url;
+use clap::Parser;
 
 use crate::display::{Display, Pixelmatrix};
 
@@ -10,16 +10,12 @@ mod remaining;
 mod timeloop;
 
 fn main() {
-    let matches = cli::build().get_matches();
+    let matches = cli::Cli::parse();
 
-    let start = matches
-        .get_one::<String>("starttime")
-        .and_then(time_string_to_date_time)
+    let start = time_string_to_date_time(&matches.starttime)
         .expect("starttime could not be read from the command line");
 
-    let mut end = matches
-        .get_one::<String>("endtime")
-        .and_then(time_string_to_date_time)
+    let mut end = time_string_to_date_time(&matches.endtime)
         .expect("endtime could not be read from the command line");
 
     let now = Local::now();
@@ -33,12 +29,12 @@ fn main() {
     let display = {
         let mut displays: Vec<Box<dyn Display>> = Vec::new();
 
-        if let Some(addr) = matches.get_one::<String>("pixelmatrix") {
+        if let Some(addr) = &matches.pixelmatrix {
             let target = Pixelmatrix::new(addr).expect("failed to connect to pixelmatrix");
             displays.push(Box::new(target));
         }
 
-        if let Some(url) = matches.get_one::<Url>("http-textmatrix") {
+        if let Some(url) = &matches.http_textmatrix {
             let target = display::Retry::new(
                 display::HttpMatrix::new(url).expect("failed to connect to http textmatrix"),
             );
@@ -55,7 +51,7 @@ fn main() {
     timeloop::timeloop(&start, &end, display);
 }
 
-fn time_string_to_date_time(timestring: &String) -> Option<DateTime<Local>> {
+fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {
     let today = Local::now().date_naive();
     let fmt = if timestring.len() > 5 {
         "%H:%M:%S"

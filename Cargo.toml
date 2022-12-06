@@ -14,15 +14,15 @@ codegen-units = 1
 lto = true
 
 [build-dependencies]
-clap = { version = "3", features = ["cargo", "env"] }
-clap_complete = "3"
+clap = { version = "4", features = ["deprecated", "derive", "env"] }
+clap_complete = "4"
 url = "2"
 
 [dependencies]
 anyhow = "1"
 bracket-color = "0.8"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
-clap = { version = "3", features = ["cargo", "env", "wrap_help"] }
+clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
 embedded-graphics = "0.7"
 retry = { version = "1", default-features = false }
 ureq = "2"

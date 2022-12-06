@@ -1,50 +1,52 @@
-use clap::{command, value_parser, Arg, Command, ValueHint};
+use clap::{Parser, ValueHint};
 use url::Url;
 
-#[allow(clippy::too_many_lines)]
-#[must_use]
-pub fn build() -> Command<'static> {
-    command!()
-        .name("Meeting Countdown")
-        .arg(
-            Arg::new("starttime")
-                .value_name("STARTTIME")
-                .value_hint(ValueHint::Other)
-                .required(true)
-                .help("Start time of the Meeting. From then the remaining time is published."),
-        )
-        .arg(
-            Arg::new("endtime")
-                .value_name("ENDTIME")
-                .value_hint(ValueHint::Other)
-                .required(true)
-                .help("End time of the Meeting. Until then the remaining time is published."),
-        )
-        .arg(
-            Arg::new("pixelmatrix")
-                .long("pixelmatrix")
-                .env("MEETING_PIXELMATRIX")
-                .value_name("ADDR")
-                .value_hint(ValueHint::Hostname)
-                .required_unless_present("pixelmatrix")
-                .help("Target Pixelmatrix Address to display the rest time to")
-                .long_help("Target Pixelmatrix Address to display the rest time to. Looks like `espPixelmatrix:1337`.\nSee https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix"),
-        )
-        .arg(
-            Arg::new("http-textmatrix")
-                .long("http-textmatrix")
-                .env("MEETING_HTTP_TEXTMATRIX")
-                .value_name("URL")
-                .value_hint(ValueHint::Url)
-                .value_parser(value_parser!(Url))
-                .required_unless_present("pixelmatrix")
-                .help("Target HTTP Textmatrix Address to display the rest time to")
-                .long_help("Target HTTP Textmatrix Address to display the rest time to. Looks like `http://esp-matrix/`.\nSee https://github.com/EdJoPaTo/esp-http-neomatrix-text")
+#[derive(Debug, Parser)]
+#[command(about, version)]
+pub struct Cli {
+    /// Start time of the Meeting.
+    ///
+    /// From then the remaining time is published.
+    #[arg(value_hint = ValueHint::Other)]
+    pub starttime: String,
 
-        )
+    /// End time of the Meeting.
+    ///
+    /// Until then the remaining time is published.
+    #[arg(value_hint = ValueHint::Other)]
+    pub endtime: String,
+
+    /// Target Pixelmatrix Address to display the rest time to.
+    ///
+    /// Looks like `espPixelmatrix:1337`.
+    ///
+    /// See <https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix>
+    #[arg(
+        long,
+        env = "MEETING_PIXELMATRIX",
+        value_name = "ADDR",
+        value_hint = ValueHint::Hostname,
+        required_unless_present = "http_textmatrix",
+    )]
+    pub pixelmatrix: Option<String>,
+
+    /// Target HTTP Textmatrix Address to display the rest time to.
+    ///
+    /// Looks like `http://esp-matrix/`.
+    ///
+    /// See <https://github.com/EdJoPaTo/esp-http-neomatrix-text>
+    #[arg(
+        long,
+        env = "MEETING_HTTP_TEXTMATRIX",
+        value_name = "URL",
+        value_hint = ValueHint::Url,
+        required_unless_present = "pixelmatrix",
+    )]
+    pub http_textmatrix: Option<Url>,
 }
 
 #[test]
 fn verify() {
-    build().debug_assert();
+    use clap::CommandFactory;
+    Cli::command().debug_assert();
 }
