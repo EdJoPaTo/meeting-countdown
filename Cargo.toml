@@ -24,7 +24,7 @@ bracket-color = "0.8"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
 embedded-graphics = "0.7"
-retry = { version = "1", default-features = false }
+retry = { version = "2", default-features = false }
 ureq = "2"
 url = "2"
 
