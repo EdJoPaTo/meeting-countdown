@@ -26,7 +26,7 @@ fn main() {
             .expect("failed to assume end date tomorrow");
     }
 
-    let display = {
+    let displays = {
         let mut displays: Vec<Box<dyn Display>> = Vec::new();
 
         if let Some(addr) = &matches.pixelmatrix {
@@ -41,14 +41,14 @@ fn main() {
             displays.push(Box::new(target));
         }
 
-        display::Multiple::new(displays)
+        displays
     };
 
     println!("Now:   {now}");
     println!("Start: {start}");
     println!("End:   {end}");
 
-    timeloop::timeloop(&start, &end, display);
+    timeloop::timeloop(&start, &end, displays);
 }
 
 fn time_string_to_date_time(timestring: &str) -> Option<DateTime<Local>> {

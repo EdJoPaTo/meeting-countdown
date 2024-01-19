@@ -8,14 +8,18 @@ use crate::remaining::Remaining;
 
 pub const TIMEFORMAT: &str = "%_H:%M:%S";
 
-pub fn timeloop<D: Display>(
+pub fn timeloop(
     start: &DateTime<chrono::Local>,
     end: &DateTime<chrono::Local>,
-    mut display: D,
+    mut displays: Vec<Box<dyn Display>>,
 ) {
     if let Ok(duration) = start.signed_duration_since(Local::now()).to_std() {
         println!("wait till start");
-        display.clear().expect("failed to clear display");
+        for d in &mut displays {
+            if let Err(err) = d.clear() {
+                println!("Display Error {err}");
+            }
+        }
         sleep(duration);
     }
 
@@ -40,9 +44,11 @@ pub fn timeloop<D: Display>(
 
         let update_interval = remaining.update_interval();
 
-        display
-            .show_remaining(position, remaining)
-            .expect("failed to set display");
+        for d in &mut displays {
+            if let Err(err) = d.show_remaining(position, remaining) {
+                println!("Display Error {err}");
+            }
+        }
 
         sleep_until_second(update_interval);
     }

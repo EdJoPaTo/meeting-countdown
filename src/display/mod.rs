@@ -1,12 +1,10 @@
 use crate::remaining::Remaining;
 
 mod http_matrix;
-mod multiple;
 mod pixelmatrix;
 mod retry;
 
 pub use self::http_matrix::HttpMatrix;
-pub use self::multiple::Multiple;
 pub use self::pixelmatrix::Pixelmatrix;
 pub use self::retry::Retry;
 
