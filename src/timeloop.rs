@@ -15,8 +15,8 @@ pub fn timeloop(
 ) {
     if let Ok(duration) = start.signed_duration_since(Local::now()).to_std() {
         println!("wait till start");
-        for d in &mut displays {
-            if let Err(err) = d.clear() {
+        for display in &mut displays {
+            if let Err(err) = display.clear() {
                 println!("Display Error {err}");
             }
         }
@@ -44,8 +44,8 @@ pub fn timeloop(
 
         let update_interval = remaining.update_interval();
 
-        for d in &mut displays {
-            if let Err(err) = d.show_remaining(position, remaining) {
+        for display in &mut displays {
+            if let Err(err) = display.show_remaining(position, remaining) {
                 println!("Display Error {err}");
             }
         }

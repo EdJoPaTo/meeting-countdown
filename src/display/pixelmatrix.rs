@@ -33,8 +33,8 @@ impl Display for Pixelmatrix {
         };
 
         let hue = interpolate_u16(80, 0, percentage);
-        let (r, g, b) = hue_to_rgb(hue);
-        let color = Rgb888::new(r, g, b);
+        let (red, green, blue) = hue_to_rgb(hue);
+        let color = Rgb888::new(red, green, blue);
         self.client.fill(0, 0, 0)?;
         Text::new(
             unit,
