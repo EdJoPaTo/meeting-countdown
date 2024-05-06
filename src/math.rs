@@ -1,4 +1,4 @@
-use bracket_color::prelude::HSV;
+use bracket_color::hsv::HSV;
 
 #[allow(clippy::cast_precision_loss)]
 pub fn calc_relative_position(start: i64, end: i64, position: i64) -> f32 {

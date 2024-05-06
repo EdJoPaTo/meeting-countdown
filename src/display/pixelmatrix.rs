@@ -1,8 +1,9 @@
+use embedded_graphics::geometry::Point;
 use embedded_graphics::mono_font::ascii::{FONT_4X6, FONT_6X12};
 use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::pixelcolor::Rgb888;
-use embedded_graphics::prelude::*;
 use embedded_graphics::text::Text;
+use embedded_graphics::Drawable;
 use esp_remotecontrolled_led_matrix_client::sync::Client;
 
 use crate::display::Display;
