@@ -10,8 +10,8 @@ use crate::remaining::Remaining;
 pub const TIMEFORMAT: &str = "%_H:%M:%S";
 
 pub fn timeloop(
-    start: &DateTime<chrono::Local>,
-    end: &DateTime<chrono::Local>,
+    start: &DateTime<Local>,
+    end: &DateTime<Local>,
     mut displays: Vec<Box<dyn Display>>,
 ) {
     if let Ok(duration) = start.signed_duration_since(Local::now()).to_std() {
