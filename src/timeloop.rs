@@ -18,7 +18,7 @@ pub fn timeloop(
         println!("wait till start");
         for display in &mut displays {
             if let Err(err) = display.clear() {
-                println!("Display Error {err}");
+                println!("Display Error {err:#}");
             }
         }
         sleep(duration);
@@ -47,7 +47,7 @@ pub fn timeloop(
 
         for display in &mut displays {
             if let Err(err) = display.show_remaining(position, remaining) {
-                println!("Display Error {err}");
+                println!("Display Error {err:#}");
             }
         }
 
