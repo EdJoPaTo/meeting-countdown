@@ -1,4 +1,7 @@
+use std::str::FromStr as _;
 use std::time::Duration;
+
+use ureq::http::Uri;
 
 use crate::display::Display;
 use crate::math::interpolate_u16;
@@ -7,22 +10,24 @@ use crate::remaining::Remaining;
 pub struct HttpMatrix {
     agent: ureq::Agent,
 
-    set_on: String,
-    set_hue: String,
-    set_sat: String,
-    set_text: String,
+    set_on: Uri,
+    set_hue: Uri,
+    set_sat: Uri,
+    set_text: Uri,
 }
 
 impl HttpMatrix {
     pub fn new(url: &url::Url) -> anyhow::Result<Self> {
-        let set_on = url.join("/on")?.to_string();
-        let set_hue = url.join("/hue")?.to_string();
-        let set_sat = url.join("/sat")?.to_string();
-        let set_text = url.join("/text")?.to_string();
+        let set_on = Uri::from_str(url.join("/on")?.as_str())?;
+        let set_hue = Uri::from_str(url.join("/hue")?.as_str())?;
+        let set_sat = Uri::from_str(url.join("/sat")?.as_str())?;
+        let set_text = Uri::from_str(url.join("/text")?.as_str())?;
 
-        let agent = ureq::AgentBuilder::new()
-            .timeout(Duration::from_millis(100))
-            .build();
+        let agent = ureq::Agent::new_with_config(
+            ureq::Agent::config_builder()
+                .timeout_global(Some(Duration::from_millis(100)))
+                .build(),
+        );
 
         // check if the remote exists and works
         agent.get(url.as_str()).call()?;
@@ -49,18 +54,16 @@ impl Display for HttpMatrix {
         };
         let hue = interpolate_u16(80, 0, percentage);
 
-        self.agent.post(&self.set_text).send_string(&text)?;
-        self.agent
-            .post(&self.set_hue)
-            .send_string(&hue.to_string())?;
-        self.agent.post(&self.set_sat).send_string("100")?;
-        self.agent.post(&self.set_on).send_string("1")?;
+        self.agent.post(&self.set_text).send(text)?;
+        self.agent.post(&self.set_hue).send(hue.to_string())?;
+        self.agent.post(&self.set_sat).send("100")?;
+        self.agent.post(&self.set_on).send("1")?;
 
         Ok(())
     }
 
     fn clear(&mut self) -> anyhow::Result<()> {
-        self.agent.post(&self.set_text).send_string("")?;
+        self.agent.post(&self.set_text).send_empty()?;
         Ok(())
     }
 }

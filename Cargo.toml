@@ -31,7 +31,7 @@ chrono = { version = "0.4", default-features = false, features = ["clock"] }
 clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
 embedded-graphics = "0.8"
 retry = { version = "2", default-features = false }
-ureq = "2"
+ureq = { version = "3", default-features = false }
 url = "2"
 
 [dependencies.esp-remotecontrolled-led-matrix-client]
