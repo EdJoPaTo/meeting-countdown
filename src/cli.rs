@@ -6,9 +6,9 @@ use url::Url;
 pub struct Cli {
     /// Start time of the Meeting.
     ///
-    /// From then the remaining time is published.
-    #[arg(value_hint = ValueHint::Other)]
-    pub starttime: String,
+    /// From then the remaining time is published. Defaults to the current time.
+    #[arg(long, value_hint = ValueHint::Other)]
+    pub starttime: Option<String>,
 
     /// End time of the Meeting.
     ///

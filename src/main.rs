@@ -12,13 +12,15 @@ mod timeloop;
 fn main() {
     let matches = cli::Cli::parse();
 
-    let start = time_string_to_date_time(&matches.starttime)
-        .expect("starttime could not be read from the command line");
+    let now = Local::now();
+
+    let start = matches.starttime.as_ref().map_or(now, |starttime| {
+        time_string_to_date_time(starttime)
+            .expect("starttime could not be read from the command line")
+    });
 
     let mut end = time_string_to_date_time(&matches.endtime)
         .expect("endtime could not be read from the command line");
-
-    let now = Local::now();
 
     if end.timestamp() - start.timestamp() <= 0 || end.timestamp() - now.timestamp() <= 0 {
         end = end
