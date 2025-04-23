@@ -1,6 +1,6 @@
 use bracket_color::hsv::HSV;
 
-#[allow(clippy::cast_precision_loss)]
+#[expect(clippy::cast_precision_loss)]
 pub fn calc_relative_position(start: i64, end: i64, position: i64) -> f32 {
     let relative_max = end - start;
     let relative_position = position - start;
@@ -9,7 +9,7 @@ pub fn calc_relative_position(start: i64, end: i64, position: i64) -> f32 {
 
 /// Converts from f32 Hue to u8 rgb values
 /// * `hue` - Hue from 0.0 to 360.0
-#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+#[expect(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 #[must_use]
 pub fn hue_to_rgb(hue: u16) -> (u8, u8, u8) {
     let hsv = HSV::from_f32(f32::from(hue) / 360.0, 1.0, 1.0);
@@ -22,11 +22,7 @@ pub fn hue_to_rgb(hue: u16) -> (u8, u8, u8) {
     (red, green, blue)
 }
 
-#[allow(
-    clippy::cast_possible_truncation,
-    clippy::cast_precision_loss,
-    clippy::cast_sign_loss
-)]
+#[expect(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 pub fn interpolate_u16(start: u16, end: u16, position: f32) -> u16 {
     let relative_max = f32::from(end) - f32::from(start);
     let relative_position = relative_max * position;

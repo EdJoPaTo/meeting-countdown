@@ -1,7 +1,7 @@
 use std::thread::sleep;
 use std::time::Duration;
 
-use chrono::{DateTime, Local, Timelike};
+use chrono::{DateTime, Local, Timelike as _};
 
 use crate::display::Display;
 use crate::math::calc_relative_position;

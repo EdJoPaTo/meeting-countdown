@@ -1,9 +1,9 @@
+use embedded_graphics::Drawable as _;
 use embedded_graphics::geometry::Point;
-use embedded_graphics::mono_font::ascii::{FONT_4X6, FONT_6X12};
 use embedded_graphics::mono_font::MonoTextStyle;
+use embedded_graphics::mono_font::ascii::{FONT_4X6, FONT_6X12};
 use embedded_graphics::pixelcolor::Rgb888;
 use embedded_graphics::text::Text;
-use embedded_graphics::Drawable;
 use esp_remotecontrolled_led_matrix_client::sync::Client;
 
 use crate::display::Display;
@@ -22,7 +22,7 @@ impl Pixelmatrix {
 }
 
 impl Display for Pixelmatrix {
-    #[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
+    #[expect(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
     fn show_remaining(&mut self, percentage: f32, remaining: Remaining) -> anyhow::Result<()> {
         let (text, unit, x) = match remaining {
             Remaining::ManyHours(hours) => (format!("{hours:>5}"), "h", -1),

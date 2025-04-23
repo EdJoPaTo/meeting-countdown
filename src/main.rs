@@ -1,5 +1,5 @@
 use chrono::{DateTime, Duration, Local, NaiveTime};
-use clap::Parser;
+use clap::Parser as _;
 
 use crate::display::{Display, Pixelmatrix};
 

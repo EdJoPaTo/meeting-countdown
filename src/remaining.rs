@@ -20,7 +20,7 @@ impl Remaining {
 }
 
 impl From<std::time::Duration> for Remaining {
-    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    #[expect(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     fn from(duration: std::time::Duration) -> Self {
         let total_seconds = duration.as_secs_f32().round() as u64;
         if total_seconds <= 90 {
