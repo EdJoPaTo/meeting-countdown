@@ -16,13 +16,13 @@ impl<D: Display> Display for Retry<D> {
         retry::retry(retry::delay::Fixed::from_millis(20).take(2), || {
             self.other.show_remaining(percentage, remaining)
         })
-        .map_err(|err| anyhow::anyhow!("{}", err))
+        .map_err(|err| anyhow::anyhow!("{err}"))
     }
 
     fn clear(&mut self) -> anyhow::Result<()> {
         retry::retry(retry::delay::Fixed::from_millis(20).take(2), || {
             self.other.clear()
         })
-        .map_err(|err| anyhow::anyhow!("{}", err))
+        .map_err(|err| anyhow::anyhow!("{err}"))
     }
 }
