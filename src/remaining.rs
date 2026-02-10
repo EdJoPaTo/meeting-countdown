@@ -53,18 +53,18 @@ fn std_duration_seconds() {
 
 #[test]
 fn std_duration_minutes() {
-    let remaining: Remaining = std::time::Duration::from_secs(70 * 60).into();
+    let remaining: Remaining = std::time::Duration::from_mins(70).into();
     assert_eq!(remaining, Remaining::Minutes(70));
 }
 
 #[test]
 fn std_duration_single_digit_hours() {
-    let remaining: Remaining = std::time::Duration::from_secs(150 * 60).into();
+    let remaining: Remaining = std::time::Duration::from_mins(150).into();
     assert_eq!(remaining, Remaining::SingleDigitHours(2, 30));
 }
 
 #[test]
 fn std_duration_many_hours() {
-    let remaining: Remaining = std::time::Duration::from_secs(70 * 60 * 60).into();
+    let remaining: Remaining = std::time::Duration::from_hours(70).into();
     assert_eq!(remaining, Remaining::ManyHours(70));
 }
